@@ -16,3 +16,30 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.timer {
+  display: flex;
+  margin-top: 5px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 5px;
+}
+
+.field:first-child {
+  border-left: 1px solid black;
+}
+
+.field:last-child {
+  border-right: 1px solid black;
+}
+
+
+.field > .value {
+  align-self: center;
+  font-weight: 700;
+  font-size: large;
+}
