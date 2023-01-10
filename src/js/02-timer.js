@@ -9,7 +9,9 @@ const options = {
     minuteIncrement: 1,
 
     onClose(selectedDates) {
+
         console.log(selectedDates[0]);
+
         const selectedDate = selectedDates[0];
         const diff = selectedDate - Date.now();
         const startBTN = document.querySelector('#startButton');
@@ -21,8 +23,6 @@ const options = {
         } else {
             startBTN.disabled = false;
         }
-
-
 
         function timerStart() {
             timer.start(selectedDate);
@@ -44,6 +44,10 @@ const timer = {
         this.intervalID = setInterval(() => {
             const diff = selectedDate - Date.now();
 
+            if (diff <= 0) {
+                clearInterval(this.intervalID)
+                return;
+            }
             const { days, hours, minutes, seconds } = this.convertMs(diff);
 
             this.rootSelector.querySelector('[data-days]').innerHTML = this.pad(days),
@@ -51,7 +55,8 @@ const timer = {
                 this.rootSelector.querySelector('[data-minutes]').innerHTML = this.pad(minutes),
                 this.rootSelector.querySelector('[data-seconds]').innerHTML = this.pad(seconds);
 
-        }, 1000)
+
+        },)
     },
 
     stop() {
