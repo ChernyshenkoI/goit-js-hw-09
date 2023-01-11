@@ -1,40 +1,47 @@
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// import { Notify } from "notiflix/build/notiflix-notify-aio";
 
-// const refs = {
-//   formEL: document.querySelector('form'),
-// } 
-// refs.formEL.addEventListener('submit', event=>{
-//   event.preventDefault();
+const refs = {
+  form: document.querySelector('.form'),
+  inputDelay: document.querySelector('[name=delay]'),
+  inputStep: document.querySelector('[name=step]'),
+  inputAmount: document.querySelector('[name=amount]'),
+};
 
-// const delay = event.target.elements.delay.value;
-// const count = event.target.elements.amount.value;
-// const interval = event.target.elements.step.value;
+function onSubmitFct(e) {
+  e.preventDefault();
 
-// setTimeout(()=>{
-//   for (let i=0; i<count; i++){
-// setTimeout(callback, interval * i, interval* i + +delay)
-//   }
-// },delay);
+  let delay = Number(refs.inputDelay.value);
+  const step = Number(refs.inputStep.value);
+  const amount = Number(refs.inputAmount.value);
 
-// });
-// function callback (data){
-//   console.log(data);
-// }
+  function createPromise(position, delay) {
+    const shouldResolve = Math.random() > 0.3;
 
-function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    // Fulfill
-  } else {
-    // Reject
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (shouldResolve) {
+          resolve({ position, delay })
+        } else
+          reject({ position, delay })
+      }, delay)
+    })
+    return promise;
+  }
+
+  for (let promiseID = 0; promiseID < amount; promiseID++) {
+
+    createPromise(promiseID + 1, delay).then(({ position, delay }) => {
+      // Notify.success 
+      console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
+    }).catch(({ position, delay }) => {
+      // Notify.failure
+      console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+    });
+    delay = delay + step
   }
 }
 
+refs.form.addEventListener('submit', onSubmitFct);
 
-createPromise(2, 1500)
-  .then(({ position, delay }) => {
-    console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-  });
+
+
